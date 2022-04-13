@@ -23,9 +23,12 @@ TRANSLATIONS += \
 CONFIG += lrelease
 CONFIG += embed_translations
 
-INCLUDEPATH += "c:/Users/admin/AppData/Local/Programs/Python/Python310/include"
-LIBS += "c:/Users/admin/AppData/Local/Programs/Python/Python310/libs/python310.lib"
+INCLUDEPATH += c:/Users/admin/AppData/Local/Programs/Python/Python310/include
+LIBS += c:/Users/admin/AppData/Local/Programs/Python/Python310/libs/python310.lib
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES += \
+    sum.py
