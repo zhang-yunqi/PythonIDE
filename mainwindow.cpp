@@ -41,11 +41,30 @@ void MainWindow::on_pushButton_clicked()
         strTemp=QString::fromLocal8Bit(p.readAllStandardError());
     }
     MainWindow::ui->textEdit_2->setText(strTemp);
-    Py_Initialize();   //初始化
 
-        if(!Py_IsInitialized())
-            return;
-        PyRun_SimpleString("print('hello python from Qt')");
-    //QDebug(strTemp.toLatin1());
+    Py_Initialize();
+       //如果初始化失败，返回
+       if(!Py_IsInitialized())
+       {
+           qDebug()<<"erro1";
+       }
+       //加载模块，模块名称为myModule，就是myModule.py文件
+       PyObject *pModule = PyImport_ImportModule("sum.py");
+       //如果加载失败，则返回
+       if(!pModule)
+       {
+           qDebug()<<"erro2";
+       }
+       //加载函数greatFunc
+       PyObject * pFuncHello = PyObject_GetAttrString(pModule, "add");
+       //如果失败则返回
+       if(!pFuncHello)
+       {
+           qDebug()<<"erro3";
+       }
+       //调用函数
+       PyObject_CallFunction(pFuncHello, NULL);
+       //退出
+       Py_Finalize();
 }
 
