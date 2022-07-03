@@ -3,7 +3,7 @@ from PyQt5.Qt import *
 import sys,os,subprocess
 app = QApplication(sys.argv)
 INPUTS=""
-
+last_dir="./"
 class Ins(QWidget):
     def __init__(self):
         super().__init__()
@@ -11,12 +11,15 @@ class Ins(QWidget):
         self.setWindowFlags(Qt.WindowMinMaxButtonsHint|Qt.FramelessWindowHint)
         self.enter.clicked.connect(self.set_input)
     def set_input(self):
-        global INPUTS
-        INPUTS=self.inputs.text()
-        self.close()
+            global INPUTS
+            INPUTS=self.inputs.text()
+            self.close()
+        
+            
 
 
 ins=Ins()
+
 
 class Out(QWidget):
     def __init__(self):
@@ -37,6 +40,7 @@ class Ui(QWidget):
         self.open.clicked.connect(self.open_file)
         self.run.clicked.connect(self.run_file)
         self.setins.clicked.connect(self.setin)
+        self.add.clicked.connect(self.add_file)
         m=QFontMetrics(self.code.font())
         self.code.setTabStopWidth(4*m.width(" "))
 
@@ -50,6 +54,7 @@ class Ui(QWidget):
         self.file_name.setText(str(self.directory[st+1:]))
         with open(self.directory,"r+") as codes:
             self.code.setText(codes.read())
+        self.directory = QFileDialog.getExistingDirectory(self,"选择文件夹",last_dir)
         self.code.setEnabled(True)
         self.run.setEnabled(True)
         self.setins.setEnabled(True)
@@ -61,13 +66,21 @@ class Ui(QWidget):
         #self.animation_run()
         stdout, stderr = re.communicate()
         if re.returncode ==0:
-            out.out(stdout.decode("utf-8"))
+            out.out( strout.deode("utf-8"))
         else:
             out.out(stderr.decode("utf-8"))
         out.show()
     def setin(self):
         ins.show()
-
+    def add_file(self):
+        global FILE,last_dir
+        self.directory = QFileDialog.getExistingDirectory(self,"选择文件夹",last_dir)
+        last_dir=self.directory
+        os.system("python ./add.py")
+        with open("filename.txt","r")as name:
+            self.directory+="/"
+            self.directory+=name.read()
+        os.system("touch "+self.directory)
         
         
 

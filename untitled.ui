@@ -103,6 +103,28 @@ border-radius: 25px;</string>
         </widget>
        </item>
        <item>
+        <widget class="QPushButton" name="add">
+         <property name="maximumSize">
+          <size>
+           <width>50</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Noto Naskh Arabic UI</family>
+           <pointsize>30</pointsize>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background:rgba(255, 255, 255, 0)</string>
+         </property>
+         <property name="text">
+          <string></string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="setins">
          <property name="enabled">
           <bool>false</bool>
