@@ -219,7 +219,6 @@ border-radius: 25px;</string>
        </property>
        <property name="styleSheet">
         <string notr="true">background: rgba(139, 163, 185,0.6);
-backdrop-filter: saturate(180%) blur(20px);
 border-radius:19px</string>
        </property>
       </widget>

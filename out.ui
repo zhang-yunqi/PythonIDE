@@ -27,7 +27,7 @@
   </property>
   <property name="styleSheet">
    <string notr="true">background:rgb(170, 170, 255);
-order-radius: 45px;
+border-radius: 10px;
 </string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -48,11 +48,16 @@ order-radius: 45px;
      </item>
      <item>
       <widget class="QPushButton" name="x">
+       <property name="font">
+        <font>
+         <pointsize>20</pointsize>
+        </font>
+       </property>
        <property name="styleSheet">
         <string notr="true">background:rgba(255,255,255, 0)</string>
        </property>
        <property name="text">
-        <string>X</string>
+        <string></string>
        </property>
       </widget>
      </item>
@@ -67,7 +72,8 @@ order-radius: 45px;
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">background:rgb(170, 255, 255)</string>
+      <string notr="true">background:rgb(170, 255, 255);
+border-radius: 10px</string>
      </property>
     </widget>
    </item>
