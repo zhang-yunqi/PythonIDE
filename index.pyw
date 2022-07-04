@@ -5,39 +5,22 @@ import os,subprocess,platform,threading
 plat = platform.system().lower()
 
 codeing = {"linux": "utf-8", "windows": "gbk"}
-cmd = {"linux": "touch", "windows": "echo >"}
+cmd = {"linux": "touch", "windows": "echo #coding:utf-8 >"}
 app = QApplication(sys.argv)
 with open("datas", "r") as data:
-    INPUTS = data.readline()[:-1]
     last_dir = data.readline()[:-1]
     python_path = data.readline()[:-1]
 
-def save_data(INPUTS, last_dir):
+def save_data(last_dir):
     with open("datas", "w") as data:
-        data.write(INPUTS+"\n")
         data.write(last_dir+"\n")
         data.write(python_path+"\n")
 
-
-class Ins(QWidget):
-    def __init__(self):
-        super().__init__()
-        global INPUTS, last_dir
-        uic.loadUi("input.ui", self)
-        self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
-        self.enter.clicked.connect(self.set_input)
-        self.inputs.setText(INPUTS)
-
     def set_input(self):
-        global INPUTS, last_dir
-        INPUTS = self.inputs.text()
-        save_data(INPUTS, last_dir)
+        global last_dir
+        save_data(last_dir)
         self.close()
-
-
-ins = Ins()
-
-
+        
 class Massage(QWidget):
     def __init__(self):
         super().__init__()
@@ -55,28 +38,12 @@ class Massage(QWidget):
 
 massage = Massage()
 
-
-class Out(QWidget):
-    def __init__(self):
-        super().__init__()
-        uic.loadUi("out.ui", self)
-        self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
-        self.x.clicked.connect(self.close)
-
-    def out(self, output):
-        self.outputing.setText(output)
-
-
-out = Out()
-
-
 class Ui(QWidget):
     def __init__(self):
         super().__init__()
         uic.loadUi('untitled.ui', self)
         self.open.clicked.connect(self.open_file)
         self.run.clicked.connect(self.run_file)
-        self.setins.clicked.connect(self.setin)
         self.add.clicked.connect(self.add_file)
         m = QFontMetrics(self.code.font())
         self.code.setTabStopWidth(4*m.width(" "))
@@ -87,26 +54,14 @@ class Ui(QWidget):
             self, "选取文件", last_dir, "*.py *.pyw")
         self.directory = self.directory[0]
         self.load_file()
-
+        with open(self.directory, "r+",encoding = " utf-8 ") as codes:
+            self.code.setText(codes.read())
+        self.code.setEnabled(True)
+        self.run.setEnabled(True)
     def run_file(self):
         with open(self.directory, "w")as codes:
             codes.write(self.code.toPlainText())
-        if plat=="linux":
-            re = subprocess.Popen([python_path+" "+self.directory+" "+INPUTS],
-                              shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        else:
-            re = subprocess.Popen("cd " + self.directory[:self.st]+" & "+python_path+" "+self.directory[self.st+1:]+" "+INPUTS,
-                              shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-        stdout, stderr = re.communicate()
-        if re.returncode == 0:
-            out.out(stdout.decode(codeing[plat]))
-        else:
-            out.out(stderr.decode(codeing[plat]))
-        out.show()
-
-    def setin(self):
-        ins.show()
+        os.system("cmd/K python "+self.directory)
 
     def add_file(self):
         global FILE, last_dir,t
@@ -126,25 +81,25 @@ class Ui(QWidget):
                 self.load_file()
             else:
                 massage.show("请选择正确的文件")
+            with open(self.directory, "r+") as codes:
+                self.code.setText(codes.read())
+            self.code.setEnabled(True)
+            self.run.setEnabled(True)
                     
 
     def load_file(self):
         if self.directory == '':
             massage.show("请选择正确的文件")
         else:
-            global last_dir, INPUTS
+            global last_dir
             self.st = 0
             for i in range(0, len(self.directory)):
                 if self.directory[i] == '/':
                     self.st = i
             last_dir = self.directory[:self.st]
-            save_data(INPUTS, last_dir)
+            save_data(last_dir)
             self.file_name.setText(str(self.directory[self.st+1:]))
-            with open(self.directory, "r+") as codes:
-                self.code.setText(codes.read())
-            self.code.setEnabled(True)
-            self.run.setEnabled(True)
-            self.setins.setEnabled(True)
+            
 
 
 ui = Ui()
