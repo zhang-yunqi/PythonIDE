@@ -1,9 +1,7 @@
 from PyQt5 import uic
 from PyQt5.Qt import *
 import sys
-import os
-import subprocess
-import platform
+import os,subprocess,platform,threading
 plat = platform.system().lower()
 
 codeing = {"linux": "utf-8", "windows": "gbk"}
@@ -13,7 +11,6 @@ with open("datas", "r") as data:
     INPUTS = data.readline()[:-1]
     last_dir = data.readline()[:-1]
     python_path = data.readline()[:-1]
-
 
 def save_data(INPUTS, last_dir):
     with open("datas", "w") as data:
@@ -112,25 +109,24 @@ class Ui(QWidget):
         ins.show()
 
     def add_file(self):
-        global FILE, last_dir
+        global FILE, last_dir,t
         self.directory = QFileDialog.getExistingDirectory(
             self, "选择文件夹", last_dir)
         last_dir = self.directory
         if self.directory == '':
             massage.show("请选择正确的文件")
         else:
-            os.system("python ./add.py")
-            with open("filename.txt", "r+")as name:
-                title = name.read()
-                if title[-3:] != ".py" or title[-4:] != ".pyw":
-                    title += ".py"
-                if title == '':
-
-                    massage.show("请选择正确的文件")
-                else:
-                    self.directory += ("/"+title)
-                    os.system(cmd[plat]+" "+self.directory)
-                    self.load_file()
+            title, okPressed = QInputDialog.getText(self, "file name","file name:", QLineEdit.Normal, "")
+            title = str(title)
+            if title[-3:] != ".py" or title[-4:] != ".pyw":
+                title += ".py"
+            if okPressed==True:
+                self.directory += ("/"+title)
+                os.system(cmd[plat]+" "+self.directory)
+                self.load_file()
+            else:
+                massage.show("请选择正确的文件")
+                    
 
     def load_file(self):
         if self.directory == '':

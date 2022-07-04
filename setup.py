@@ -1,4 +1,2 @@
-from distutils.core import setup
-import py2exe
-
-setup(console=["index.pyw"])
+import os
+os.popen("python ./add.pyw")
