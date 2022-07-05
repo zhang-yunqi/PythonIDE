@@ -61,7 +61,10 @@ class Ui(QWidget):
     def run_file(self):
         with open(self.directory, "w")as codes:
             codes.write(self.code.toPlainText())
-        os.system("cmd/K python "+self.directory)
+        if plat=="windows":
+            os.system("cmd/K python "+self.directory)
+        else:
+            os.system("konsole --noclose -e "+python_path+" "+self.directory)
 
     def add_file(self):
         global FILE, last_dir,t
